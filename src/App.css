@@ -50,10 +50,28 @@ h1 {
 
 /* Torta i svećice */
 .cake-stage {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 1rem 0 1.5rem;
+}
+
+.candles-row {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: -6px;
+  z-index: 3;
+}
+
+.cake {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .candle {
@@ -108,14 +126,6 @@ h1 {
   box-shadow: inset -3px 0 0 rgba(0, 0, 0, 0.15);
 }
 
-.candles-row {
-  display: flex;
-  gap: 0px;
-  align-items: flex-end;
-  margin-bottom: -6px;
-  z-index: 2;
-}
-
 .wick {
   width: 3px;
   height: 4px;
@@ -163,12 +173,6 @@ h1 {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.cake {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .tier {
   position: relative;
   background: linear-gradient(180deg, #92400e 0%, #78350f 100%);
@@ -203,6 +207,16 @@ h1 {
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
 }
 
+/* Tata */
+.dad-peeking {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  z-index: 1;
+  pointer-events: none;
+  animation: peekUpCenter 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 /* Kartica sa porukom */
 .surprise {
   margin-top: 1.8rem;
@@ -216,13 +230,14 @@ h1 {
 .surprise h2 {
   margin: 0 0 0.6rem;
   color: #fde68a;
-  font-size: 1.4rem;
+  font-size: 1.8rem;
 }
 
 .surprise p {
   margin: 0 0 1.2rem;
   line-height: 1.6;
   color: #e2e8f0;
+  font-size: 1.2rem;
 }
 
 .reset-btn {
@@ -272,5 +287,16 @@ h1 {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes peekUpCenter {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 }

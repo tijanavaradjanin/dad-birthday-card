@@ -79,7 +79,7 @@ function NumberCandleShape({ digit }) {
         />
       )}
 
-      {/* Tanak sjaj po sredini voska za osećaj dubine */}
+      {/* Tanak sjaj po sredini voska */}
       {digit === "6" && (
         <path
           d="M 54 22 C 34 22, 22 38, 22 60 C 22 76, 31 85, 43 85 C 54 85, 61 77, 61 67 C 61 57, 54 50, 43 50 C 34 50, 27 55, 24 62"
@@ -134,11 +134,67 @@ export default function App() {
     setCandles(INITIAL_CANDLES);
   }
 
+  function DadCharacter() {
+  return (
+    <div className="dad-peeking" aria-hidden="true">
+      <svg viewBox="0 0 140 120" width="150" height="128">
+        {/* Ramena / majica */}
+        <path
+          d="M 24 118 C 26 88, 46 78, 70 78 C 94 78, 114 88, 116 118 Z"
+          fill="#2563eb"
+        />
+        {/* Vrat */}
+        <rect x="61" y="66" width="18" height="16" rx="6" fill="#f1c29b" />
+        {/* Glava */}
+        <circle cx="70" cy="48" r="27" fill="#f5cba7" />
+        {/* Uši */}
+        <ellipse cx="42" cy="49" rx="5.5" ry="8" fill="#f5cba7" />
+        <ellipse cx="98" cy="49" rx="5.5" ry="8" fill="#f5cba7" />
+        {/* Kosa */}
+        <path
+          d="M 44 43 C 42 32, 47 22, 54 18 C 56 13, 61 12, 65 15 C 69 11, 75 11, 78 16 C 83 13, 88 15, 89 20 C 95 24, 97 33, 96 43 C 92 34, 86 29, 78 28 C 73 25, 67 25, 62 28 C 54 29, 48 34, 44 43 Z"
+          fill="#94a3b8"
+        />
+        {/* Obrve */}
+        <path
+          d="M 52 40 Q 58 36 64 40"
+          fill="none"
+          stroke="#475569"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 76 40 Q 82 36 88 40"
+          fill="none"
+          stroke="#475569"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        {/* Oči */}
+        <circle cx="58" cy="47" r="3" fill="#1e293b" />
+        <circle cx="82" cy="47" r="3" fill="#1e293b" />
+        {/* Rumenilo */}
+        <ellipse cx="49" cy="54" rx="4.5" ry="2.5" fill="#fb7185" opacity="0.45" />
+        <ellipse cx="91" cy="54" rx="4.5" ry="2.5" fill="#fb7185" opacity="0.45" />
+        {/* Osmeh */}
+        <path
+          d="M 57 58 Q 70 70 83 58"
+          fill="none"
+          stroke="#1e293b"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
   return (
     <div className="page">
       <main className="card">
         {!allBlownOut && <h1>Zamisli želju i klikni na svećice da ih ugasiš.</h1>}
         <div className="cake-stage">
+          {allBlownOut && <DadCharacter />}
           <div className="candles-row">
             {candles.map((candle, index) => (
               <button
