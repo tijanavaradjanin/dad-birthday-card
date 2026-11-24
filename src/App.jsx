@@ -2,18 +2,123 @@ import { useState } from "react";
 import confetti from "canvas-confetti";
 import "./App.css";
 
-export default function App() {
-  const [candles, setCandles] = useState([true, true, true, true]);
+const INITIAL_CANDLES = [
+  { id: "6", label: "6", isLit: true },
+  { id: "3", label: "3", isLit: true },
+];
 
-  const allBlownOut = candles.every((isLit) => !isLit);
+function NumberCandleShape({ digit }) {
+  return (
+    <svg
+      className="candle-svg"
+      viewBox="0 0 80 100"
+      width="68"
+      height="86"
+      aria-hidden="true"
+    >
+      <defs>
+        <pattern
+          id={`stripes-${digit}`}
+          width="18"
+          height="18"
+          patternTransform="rotate(-35)"
+          patternUnits="userSpaceOnUse"
+        >
+          <rect x="0" y="0" width="9" height="18" fill="#f8fafc" />
+          <rect x="9" y="0" width="5" height="18" fill="#38bdf8" />
+          <rect x="14" y="0" width="4" height="18" fill="#0284c7" />
+        </pattern>
+      </defs>
+
+      {/* Blaga senka ispod svećice */}
+      <ellipse cx="40" cy="94" rx="22" ry="4" fill="rgba(0, 0, 0, 0.35)" />
+
+      {/* Tamni okvir radi oštrine i kontrasta */}
+      {digit === "6" && (
+        <path
+          d="M 54 22 C 34 22, 22 38, 22 60 C 22 76, 31 85, 43 85 C 54 85, 61 77, 61 67 C 61 57, 54 50, 43 50 C 34 50, 27 55, 24 62"
+          fill="none"
+          stroke="#0c4a6e"
+          strokeWidth="18"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+
+      {digit === "3" && (
+        <path
+          d="M 24 25 L 55 25 L 38 48 C 50 48, 59 55, 59 67 C 59 79, 49 85, 36 85 C 28 85, 22 82, 19 78"
+          fill="none"
+          stroke="#0c4a6e"
+          strokeWidth="18"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+
+      {/* Glavno prugasto telo svećice */}
+      {digit === "6" && (
+        <path
+          d="M 54 22 C 34 22, 22 38, 22 60 C 22 76, 31 85, 43 85 C 54 85, 61 77, 61 67 C 61 57, 54 50, 43 50 C 34 50, 27 55, 24 62"
+          fill="none"
+          stroke={`url(#stripes-6)`}
+          strokeWidth="13"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+
+      {digit === "3" && (
+        <path
+          d="M 24 25 L 55 25 L 38 48 C 50 48, 59 55, 59 67 C 59 79, 49 85, 36 85 C 28 85, 22 82, 19 78"
+          fill="none"
+          stroke={`url(#stripes-3)`}
+          strokeWidth="13"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+
+      {/* Tanak sjaj po sredini voska za osećaj dubine */}
+      {digit === "6" && (
+        <path
+          d="M 54 22 C 34 22, 22 38, 22 60 C 22 76, 31 85, 43 85 C 54 85, 61 77, 61 67 C 61 57, 54 50, 43 50 C 34 50, 27 55, 24 62"
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.35)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+
+      {digit === "3" && (
+        <path
+          d="M 24 25 L 55 25 L 38 48 C 50 48, 59 55, 59 67 C 59 79, 49 85, 36 85 C 28 85, 22 82, 19 78"
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.35)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+    </svg>
+  );
+}
+
+export default function App() {
+  const [candles, setCandles] = useState(INITIAL_CANDLES);
+
+  const allBlownOut = candles.every((candle) => !candle.isLit);
 
   function extinguishCandle(index) {
     setCandles((prev) => {
-      if (!prev[index]) return prev;
+      if (!prev[index].isLit) return prev;
 
-      const updated = prev.map((isLit, i) => (i === index ? false : isLit));
+      const updated = prev.map((candle, i) =>
+        i === index ? { ...candle, isLit: false } : candle
+      );
 
-      if (updated.every((isLit) => !isLit)) {
+      if (updated.every((candle) => !candle.isLit)) {
         confetti({
           particleCount: 120,
           spread: 80,
@@ -26,33 +131,31 @@ export default function App() {
   }
 
   function resetCandles() {
-    setCandles([true, true, true, true]);
+    setCandles(INITIAL_CANDLES);
   }
 
   return (
     <div className="page">
       <main className="card">
-        <h1>Srećan rođendan, tata!</h1>
-        <p className="subtitle">
-          {allBlownOut
-            ? "Sve svećice su ugašene — želja je zamišljena!"
-            : "Zamisli želju i klikni na svaku svećicu da je ugasiš."}
-        </p>
-
+        {!allBlownOut && <h1>Zamisli želju i klikni na svećice da ih ugasiš.</h1>}
         <div className="cake-stage">
           <div className="candles-row">
-            {candles.map((isLit, index) => (
+            {candles.map((candle, index) => (
               <button
-                key={index}
+                key={candle.id}
                 type="button"
-                className={`candle ${isLit ? "is-lit" : "is-out"}`}
+                className={`candle ${candle.isLit ? "is-lit" : "is-out"}`}
                 onClick={() => extinguishCandle(index)}
-                disabled={!isLit}
-                aria-label={`Svećica ${index + 1}`}
+                disabled={!candle.isLit}
+                aria-label={`Svećica ${candle.label}`}
               >
-                {isLit ? <span className="flame" /> : <span className="smoke" />}
+                {candle.isLit ? (
+                  <span className="flame" />
+                ) : (
+                  <span className="smoke" />
+                )}
                 <span className="wick" />
-                <span className="candle-body" />
+                <NumberCandleShape digit={candle.label} />
               </button>
             ))}
           </div>
@@ -70,9 +173,9 @@ export default function App() {
 
         {allBlownOut && (
           <section className="surprise">
-            <h2>Srećan 63. rođendan!</h2>
+            <h2>Srećan rođendan, tata!</h2>
             <p>
-              Hvala ti za svu podršku, strpljenje i najbolje savete. Neka ti
+              Hvala ti za svu podršku, strpljenje i najbolje savete. Neka
               ova godina donese puno zdravlja, smeha i lepih trenutaka!
             </p>
             <button type="button" className="reset-btn" onClick={resetCandles}>
